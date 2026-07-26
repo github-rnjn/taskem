@@ -53,11 +53,42 @@ class TaskRepository {
 
     }
 
-    async findByIdAndUser(categoryId, userId) {
-        return Category.findOne({
-            _id: categoryId,
-            createdBy: userId
-        });
+    async findByIdAndUser(taskId, userId) {
+        return Task.findOne({
+            _id: taskId,
+            createdBy: userId,
+            isArchived: false
+        }).populate("category", "name color icon");
+    }
+
+    async update(taskId, data) {
+        return Task.findByIdAndUpdate(
+            taskId,
+            data,
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate(
+            "category",
+            "name color icon"
+        );
+    }
+
+    async archive(taskId, userId) {
+        return Task.findOneAndUpdate(
+            {
+                _id: taskId,
+                createdBy: userId
+            },
+            {
+                isArchived: true,
+                updatedBy: userId
+            },
+            {
+                new: true
+            }
+        );
     }
 }
 

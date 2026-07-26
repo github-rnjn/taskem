@@ -5,6 +5,8 @@ const { HTTP_STATUS } = require("../constants");
 const taskRepository = require("../repositories/task.repository");
 const categoryRepository = require("../repositories/category.repository");
 
+const { toTitleCase } = require("../utils/string");
+
 const allowedSortFields = [
     "createdAt",
     "updatedAt",
@@ -17,6 +19,10 @@ const allowedSortFields = [
 class TaskService {
 
     async create(userId, data) {
+
+        if(data.title){
+            data.title = toTitleCase(data.title);
+        }
 
         if (data.category) {
 
@@ -43,7 +49,7 @@ class TaskService {
                         .map(label => label.trim().toLowerCase())
                         .filter(Boolean)
                 )
-            ];
+            ].sort();
 
         }
 
@@ -61,8 +67,11 @@ class TaskService {
 
     async getAll(userId, query) {
 
-        const page = Number(query.page) || 1;
-        const limit = Number(query.limit) || 10;
+        const page = Math.max(Number(query.page) || 1, 1);
+        const limit = Math.min(
+            Math.max(Number(query.limit) || 10, 1),
+            100
+        );
 
         const filters = {};
 
@@ -75,7 +84,7 @@ class TaskService {
         if (query.category)
             filters.category = query.category;
 
-        if (query.search) {
+        if (query.search?.trim()) {
             filters.$or = [
                 {
                     title: {
@@ -143,6 +152,116 @@ class TaskService {
 
     }
 
+    async getById(userId, taskId) {
+
+        const task =
+            await taskRepository.findByIdAndUser(
+                taskId,
+                userId
+            );
+
+        if (!task) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "Task not found"
+            );
+        }
+
+        return task;
+    }
+
+    async update(userId, taskId, data) {
+
+        if(data.title){
+            data.title = toTitleCase(data.title);
+        }
+
+        const task =
+            await taskRepository.findByIdAndUser(
+                taskId,
+                userId
+            );
+
+        if (!task) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "Task not found"
+            );
+        }
+
+        if (data.category) {
+
+            const category =
+                await categoryRepository.findByIdAndUser(
+                    data.category,
+                    userId
+                );
+
+            if (!category) {
+                throw new ApiError(
+                    HTTP_STATUS.NOT_FOUND,
+                    "Category not found"
+                );
+            }
+
+        }
+
+        if (data.labels) {
+
+            data.labels = [
+                ...new Set(
+                    data.labels
+                        .map(label =>
+                            label.trim().toLowerCase()
+                        )
+                        .filter(Boolean)
+                )
+            ];
+
+        }
+
+        if (
+            task.status !== "COMPLETED" &&
+            data.status === "COMPLETED"
+        ) {
+            data.completedAt = new Date();
+        }
+
+        if (
+            task.status === "COMPLETED" &&
+            data.status &&
+            data.status !== "COMPLETED"
+        ) {
+            data.completedAt = null;
+        }
+
+        data.updatedBy = userId;
+
+        return taskRepository.update(
+            taskId,
+            data
+        );
+
+    }
+
+    async delete(userId, taskId) {
+
+        const task =
+            await taskRepository.findByIdAndUser(
+                taskId,
+                userId
+            );
+
+        if (!task) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "Task not found"
+            );
+        }
+
+        await taskRepository.delete(taskId);
+
+    }
 }
 
 module.exports = new TaskService();
