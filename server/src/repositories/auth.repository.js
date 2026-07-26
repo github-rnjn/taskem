@@ -28,6 +28,17 @@ class AuthRepository {
         }).select("+password");
     }
 
+    async updateLastLogin(userId) {
+        return User.findByIdAndUpdate(
+            userId,
+            {
+                lastLogin: new Date()
+            },
+            {
+                new: true
+            }
+        );
+    }
 }
 
 module.exports = new AuthRepository();

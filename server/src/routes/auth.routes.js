@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { register,verifyEmail,resendVerification,login } = require("../controllers/auth.controller");
+const { register,verifyEmail,resendVerification,login,refreshToken } = require("../controllers/auth.controller");
 
 const validate = require("../middlewares/validate.middleware");
 
@@ -30,6 +30,11 @@ router.post(
     "/login",
     validate(loginSchema),
     login
+);
+
+router.post(
+    "/refresh-token",
+    refreshToken
 );
 
 module.exports = router;

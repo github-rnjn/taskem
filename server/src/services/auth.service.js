@@ -97,9 +97,7 @@ class AuthService {
 
         });
 
-        user.lastLogin = new Date();
-
-        await user.save();
+        await authRepository.updateLastLogin(user._id);
 
         return {
             user,
@@ -209,6 +207,67 @@ class AuthService {
         });
 
         await emailService.sendVerificationEmail(user, otp);
+    }
+
+    async refreshToken(refreshToken) {
+
+        if (!refreshToken) {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "Refresh token missing"
+            );
+        }
+
+        let payload;
+
+        try {
+            payload = verifyRefreshToken(refreshToken);
+        } catch {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "Invalid refresh token"
+            );
+        }
+
+        const tokenHash = hashToken(refreshToken);
+
+        const session =
+            await sessionRepository.findByRefreshTokenHash(
+                tokenHash
+            );
+
+        if (!session) {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "Session expired"
+            );
+        }
+
+        const newPayload = {
+            id: payload.id,
+            email: payload.email
+        };
+
+        const newAccessToken =
+            generateAccessToken(newPayload);
+
+        const newRefreshToken =
+            generateRefreshToken(newPayload);
+
+        await sessionRepository.updateRefreshToken(
+
+            session._id,
+
+            hashToken(newRefreshToken),
+
+            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+
+        );
+
+        return {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
+        };
     }
 }
 

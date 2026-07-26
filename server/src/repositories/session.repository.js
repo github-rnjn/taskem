@@ -5,8 +5,10 @@ class SessionRepository {
         return Session.create(sessionData);
     }
 
-    async findByRefreshToken(refreshToken) {
-        return Session.findOne({ refreshToken });
+    async findByRefreshTokenHash(refreshTokenHash) {
+        return Session.findOne({
+            refreshToken: refreshTokenHash
+        }).select("+refreshToken");
     }
 
     async deleteById(id) {
@@ -25,6 +27,20 @@ class SessionRepository {
             },
             {
                 new: true,
+            }
+        );
+    }
+
+    async updateRefreshToken(sessionId, refreshTokenHash, expiresAt) {
+        return Session.findByIdAndUpdate(
+            sessionId,
+            {
+                refreshToken: refreshTokenHash,
+                expiresAt,
+                lastUsedAt: new Date()
+            },
+            {
+                new: true
             }
         );
     }

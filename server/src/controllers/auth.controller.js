@@ -99,9 +99,42 @@ const resendVerification = asyncHandler(async (req, res) => {
 
 });
 
+const refreshToken = asyncHandler(async (req, res) => {
+
+    const token = req.cookies.refreshToken;
+
+    const result =
+        await authService.refreshToken(token);
+
+    res.cookie(
+        "refreshToken",
+        result.refreshToken,
+        {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        }
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Token refreshed successfully",
+            {
+                accessToken: result.accessToken
+            }
+        )
+
+    );
+
+});
+
 module.exports = {
     register,
     login,
     verifyEmail,
     resendVerification,
+    refreshToken
 };
