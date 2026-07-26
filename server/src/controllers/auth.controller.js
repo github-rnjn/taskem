@@ -154,11 +154,32 @@ const logout = asyncHandler(async (req, res) => {
 
 });
 
+const forgotPassword = asyncHandler(async (req, res) => {
+
+    await authService.forgotPassword(
+        req.body.email
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            HTTP_STATUS.OK,
+
+            "Password reset code sent successfully"
+
+        )
+
+    );
+
+});
+
 module.exports = {
     register,
     login,
     logout,
     verifyEmail,
     resendVerification,
-    refreshToken
+    refreshToken,
+    forgotPassword
 };

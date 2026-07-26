@@ -30,9 +30,17 @@ const loginSchema = z.object({
     password: z.string().min(8).max(100)
 });
 
+const forgotPasswordSchema = z.object({
+    email: z
+        .string()
+        .trim()
+        .email()
+});
+
 module.exports = {
     registerSchema,
     verifyEmailSchema,
     resendVerificationSchema,
-    loginSchema
+    loginSchema,
+    forgotPasswordSchema
 };

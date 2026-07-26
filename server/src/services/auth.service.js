@@ -292,6 +292,52 @@ class AuthService {
 
         return;
     }
+
+    async forgotPassword(email) {
+
+        const user = await authRepository.findByEmail(email);
+
+        if (!user) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "User not found"
+            );
+        }
+
+        if (!user.isVerified) {
+            throw new ApiError(
+                HTTP_STATUS.FORBIDDEN,
+                "Please verify your email first."
+            );
+        }
+
+        await verificationTokenRepository.deleteByUser(
+            user._id,
+            TOKEN_TYPES.PASSWORD_RESET
+        );
+
+        const otp = generateNumericOTP();
+
+        await verificationTokenRepository.create({
+
+            user: user._id,
+
+            tokenHash: hashToken(otp),
+
+            type: TOKEN_TYPES.PASSWORD_RESET,
+
+            expiresAt: new Date(
+                Date.now() + 10 * 60 * 1000
+            )
+
+        });
+
+        await emailService.sendPasswordResetEmail(
+            user,
+            otp
+        );
+
+    }
 }
 
 module.exports = new AuthService();

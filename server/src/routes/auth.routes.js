@@ -2,11 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
-const { register,verifyEmail,resendVerification,login,refreshToken,logout } = require("../controllers/auth.controller");
+const { register,verifyEmail,resendVerification,login,refreshToken,logout,forgotPassword } = require("../controllers/auth.controller");
 
 const validate = require("../middlewares/validate.middleware");
 
-const { registerSchema,verifyEmailSchema,resendVerificationSchema,loginSchema } = require("../validators/auth.validator");
+const { registerSchema,verifyEmailSchema,resendVerificationSchema,loginSchema,forgotPasswordSchema } = require("../validators/auth.validator");
 
 const authMiddleware = require("../middlewares/auth.middleware");
 router.post(
@@ -42,6 +42,12 @@ router.post(
     "/logout",
     authMiddleware,
     logout
+);
+
+router.post(
+    "/forgot-password",
+    validate(forgotPasswordSchema),
+    forgotPassword
 );
 
 module.exports = router;
