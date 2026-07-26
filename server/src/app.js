@@ -8,6 +8,8 @@ const morgan = require("morgan");
 const notFound = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/error.middleware");
 
+const healthRoutes = require("./routes/health.routes");
+
 const app = express();
 
 app.use(helmet());
@@ -29,17 +31,7 @@ app.use(cookieParser());
 
 app.use(morgan("dev"));
 
-app.get("/health", (req, res) => {
-
-    res.json({
-
-        success: true,
-
-        message: "Server Running"
-
-    });
-
-});
+app.use("/health", healthRoutes);
 
 app.use(notFound);
 
