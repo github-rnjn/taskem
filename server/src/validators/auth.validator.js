@@ -37,10 +37,21 @@ const forgotPasswordSchema = z.object({
         .email()
 });
 
+const resetPasswordSchema = z.object({
+
+    email: z.string().trim().email(),
+
+    otp: z.string().trim().length(6),
+
+    password: z.string().min(8).max(100)
+
+});
+
 module.exports = {
     registerSchema,
     verifyEmailSchema,
     resendVerificationSchema,
     loginSchema,
-    forgotPasswordSchema
+    forgotPasswordSchema,
+    resetPasswordSchema
 };

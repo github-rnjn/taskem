@@ -174,6 +174,37 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
 });
 
+const resetPassword = asyncHandler(async (req, res) => {
+
+    const {
+        email,
+        otp,
+        password
+    } = req.body;
+
+    await authService.resetPassword(
+        email,
+        otp,
+        password
+    );
+
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "strict"
+    });
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            "Password reset successfully"
+        )
+
+    );
+
+});
+
 module.exports = {
     register,
     login,
@@ -181,5 +212,6 @@ module.exports = {
     verifyEmail,
     resendVerification,
     refreshToken,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 };

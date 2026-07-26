@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const bcrypt = require("bcrypt");
 
 class AuthRepository {
 
@@ -9,7 +10,7 @@ class AuthRepository {
     async findById(userId) {
         return User.findById(userId);
     }
-    
+
     async create(userData) {
         return User.create(userData);
     }
@@ -37,6 +38,20 @@ class AuthRepository {
             userId,
             {
                 lastLogin: new Date()
+            },
+            {
+                new: true
+            }
+        );
+    }
+
+    async updatePassword(userId, password) {
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        return User.findByIdAndUpdate(
+            userId,
+            {
+                password: hashedPassword
             },
             {
                 new: true

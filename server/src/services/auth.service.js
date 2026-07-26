@@ -338,6 +338,56 @@ class AuthService {
         );
 
     }
+
+    async resetPassword(email, otp, password) {
+
+        const user = await authRepository.findByEmail(email);
+
+        if (!user) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "User not found"
+            );
+        }
+
+        const verificationToken =
+            await verificationTokenRepository.findByUser(
+                user._id,
+                TOKEN_TYPES.PASSWORD_RESET
+            );
+
+        if (!verificationToken) {
+            throw new ApiError(
+                HTTP_STATUS.BAD_REQUEST,
+                "Reset code expired"
+            );
+        }
+
+        const hashedOTP = hashToken(otp);
+
+        if (hashedOTP !== verificationToken.tokenHash) {
+            throw new ApiError(
+                HTTP_STATUS.BAD_REQUEST,
+                "Invalid reset code"
+            );
+        }
+
+        await authRepository.updatePassword(
+            user._id,
+            password
+        );
+
+        await verificationTokenRepository.deleteByUser(
+            user._id,
+            TOKEN_TYPES.PASSWORD_RESET
+        );
+
+        await sessionRepository.deleteAllByUser(
+            user._id
+        );
+
+        return;
+    }
 }
 
 module.exports = new AuthService();
