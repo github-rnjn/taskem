@@ -47,11 +47,31 @@ const resetPasswordSchema = z.object({
 
 });
 
+const createCategorySchema = z.object({
+
+    name: z
+        .string()
+        .trim()
+        .min(2)
+        .max(30),
+
+    color: z
+        .string()
+        .regex(/^#[0-9A-Fa-f]{6}$/),
+
+    icon: z
+        .string()
+        .trim()
+        .max(30)
+
+});
+
 module.exports = {
     registerSchema,
     verifyEmailSchema,
     resendVerificationSchema,
     loginSchema,
     forgotPasswordSchema,
-    resetPasswordSchema
+    resetPasswordSchema,
+    createCategorySchema
 };
