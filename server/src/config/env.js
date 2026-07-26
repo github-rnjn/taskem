@@ -8,7 +8,8 @@ const requiredEnvVariables = [
     "CLIENT_URL",
     "JWT_ACCESS_SECRET",
     "JWT_REFRESH_SECRET",
-    "RESEND_API_KEY"
+    "RESEND_API_KEY",
+    "EMAIL_FROM"
 ];
 
 requiredEnvVariables.forEach((key) => {

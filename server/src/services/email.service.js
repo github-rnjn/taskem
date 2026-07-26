@@ -1,5 +1,6 @@
 const resend = require("../emails/resend");
 const env = require("../config/env");
+const verificationTemplate = require("../emails/verification.template")
 
 class EmailService {
     async sendEmail({ to, subject, html }) {
@@ -8,6 +9,14 @@ class EmailService {
             to,
             subject,
             html,
+        });
+    }
+
+    async sendVerificationEmail(user, otp) {
+        return this.sendEmail({
+            to: user.email,
+            subject: "Verify your email",
+            html: verificationTemplate(user.name, otp),
         });
     }
 }

@@ -24,6 +24,24 @@ const register = asyncHandler(async (req, res) => {
 
 });
 
+const verifyEmail = asyncHandler(async (req, res) => {
+
+    const { email, otp } = req.body;
+
+    await authService.verifyEmail(email, otp);
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Email verified successfully"
+        )
+
+    );
+
+});
+
 module.exports = {
-    register
+    register,
+    verifyEmail
 };

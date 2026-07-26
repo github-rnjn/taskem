@@ -1,6 +1,7 @@
 const VerificationToken = require("../models/verificationToken.model");
 
 class VerificationTokenRepository {
+
     async create(data) {
         return VerificationToken.create(data);
     }
@@ -13,15 +14,12 @@ class VerificationTokenRepository {
     }
 
     async deleteByUser(userId, type) {
-        return VerificationToken.deleteOne({
+        return VerificationToken.deleteMany({
             user: userId,
             type,
         });
     }
 
-    async deleteById(id) {
-        return VerificationToken.findByIdAndDelete(id);
-    }
 }
 
 module.exports = new VerificationTokenRepository();
