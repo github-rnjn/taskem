@@ -1,6 +1,7 @@
 const ApiError = require("../utils/ApiError");
 
 const authRepository = require("../repositories/auth.repository");
+const sessionRepository = require("../repositories/session.repository");
 const verificationTokenRepository = require("../repositories/verificationToken.repository");
 
 const emailService = require("./email.service");
@@ -9,6 +10,7 @@ const { HTTP_STATUS } = require("../constants");
 const TOKEN_TYPES = require("../constants/tokenTypes");
 
 const { generateNumericOTP, hashToken } = require("../utils/token");
+const {generateAccessToken,generateRefreshToken} = require("../utils/jwt");
 
 class AuthService {
     async register(data) {
@@ -41,6 +43,69 @@ class AuthService {
         await emailService.sendVerificationEmail(user, otp);
 
         return user;
+    }
+
+    async login(data, deviceInfo) {
+
+        const user = await authRepository.findByEmailWithPassword(data.email);
+
+        if (!user) {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "Invalid email or password"
+            );
+        }
+
+        if (!user.isVerified) {
+            throw new ApiError(
+                HTTP_STATUS.FORBIDDEN,
+                "Please verify your email first."
+            );
+        }
+
+        const isPasswordCorrect = await user.comparePassword(data.password);
+
+        if (!isPasswordCorrect) {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "Invalid email or password"
+            );
+        }
+
+        const payload = {
+            id: user._id,
+            email: user.email
+        };
+
+        const accessToken = generateAccessToken(payload);
+
+        const refreshToken = generateRefreshToken(payload);
+
+        await sessionRepository.create({
+
+            user: user._id,
+
+            refreshToken: hashToken(refreshToken),
+
+            deviceName: deviceInfo.deviceName,
+
+            userAgent: deviceInfo.userAgent,
+
+            ipAddress: deviceInfo.ipAddress,
+
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+
+        });
+
+        user.lastLogin = new Date();
+
+        await user.save();
+
+        return {
+            user,
+            accessToken,
+            refreshToken
+        };
     }
 
     async verifyEmail(email, otp) {

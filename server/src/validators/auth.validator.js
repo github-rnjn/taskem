@@ -24,9 +24,15 @@ const resendVerificationSchema = z.object({
         .email()
 });
 
+const loginSchema = z.object({
+    email: z.string().trim().email(),
+
+    password: z.string().min(8).max(100)
+});
 
 module.exports = {
     registerSchema,
     verifyEmailSchema,
-    resendVerificationSchema
+    resendVerificationSchema,
+    loginSchema
 };

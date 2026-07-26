@@ -2,11 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
-const { register,verifyEmail } = require("../controllers/auth.controller");
+const { register,verifyEmail,resendVerification,login } = require("../controllers/auth.controller");
 
 const validate = require("../middlewares/validate.middleware");
 
-const { registerSchema,verifyEmailSchema } = require("../validators/auth.validator");
+const { registerSchema,verifyEmailSchema,resendVerificationSchema,loginSchema } = require("../validators/auth.validator");
 
 router.post(
     "/register",
@@ -24,6 +24,12 @@ router.post(
     "/resend-verification",
     validate(resendVerificationSchema),
     resendVerification
+);
+
+router.post(
+    "/login",
+    validate(loginSchema),
+    login
 );
 
 module.exports = router;

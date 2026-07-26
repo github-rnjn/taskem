@@ -24,6 +24,51 @@ const register = asyncHandler(async (req, res) => {
 
 });
 
+const login = asyncHandler(async (req, res) => {
+
+    const deviceInfo = {
+        deviceName: req.headers["sec-ch-ua"] || "Unknown Device",
+        userAgent: req.headers["user-agent"],
+        ipAddress: req.ip
+    };
+
+    const result = await authService.login(
+        req.body,
+        deviceInfo
+    );
+
+    res.cookie("refreshToken", result.refreshToken, {
+
+        httpOnly: true,
+
+        secure: process.env.NODE_ENV === "production",
+
+        sameSite: "strict",
+
+        maxAge: 7 * 24 * 60 * 60 * 1000
+
+    });
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Login successful",
+            {
+                accessToken: result.accessToken,
+
+                user: {
+                    id: result.user._id,
+                    name: result.user.name,
+                    email: result.user.email
+                }
+            }
+        )
+
+    );
+
+});
+
 const verifyEmail = asyncHandler(async (req, res) => {
 
     const { email, otp } = req.body;
@@ -56,6 +101,7 @@ const resendVerification = asyncHandler(async (req, res) => {
 
 module.exports = {
     register,
+    login,
     verifyEmail,
-    resendVerification
+    resendVerification,
 };
