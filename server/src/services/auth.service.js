@@ -243,6 +243,13 @@ class AuthService {
             );
         }
 
+        if (session.user.toString() !== payload.id) {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "Invalid session"
+            );
+        }
+
         const newPayload = {
             id: payload.id,
             email: payload.email
@@ -268,6 +275,22 @@ class AuthService {
             accessToken: newAccessToken,
             refreshToken: newRefreshToken
         };
+    }
+
+    async logout(userId,refreshToken) {
+
+        if (!refreshToken) {
+            return;
+        }
+
+        const tokenHash = hashToken(refreshToken);
+
+        await sessionRepository.deleteByUserAndRefreshTokenHash(
+            userId,
+            tokenHash
+        );
+
+        return;
     }
 }
 

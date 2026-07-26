@@ -44,6 +44,13 @@ class SessionRepository {
             }
         );
     }
+
+    async deleteByUserAndRefreshTokenHash(userId, refreshTokenHash) {
+        return Session.findOneAndDelete({
+            user: userId,
+            refreshToken: refreshTokenHash
+        });
+    }
 }
 
 module.exports = new SessionRepository();

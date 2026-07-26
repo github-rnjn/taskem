@@ -1,6 +1,8 @@
 const asyncHandler = require("../utils/asyncHandler");
 const ApiResponse = require("../utils/ApiResponse");
-const {HTTPS_STATUS} = require("../constants/index")
+const {HTTP_STATUS} = require("../constants/index");
+
+const env = require("../config/env");
 
 const authService = require("../services/auth.service");
 
@@ -131,9 +133,31 @@ const refreshToken = asyncHandler(async (req, res) => {
 
 });
 
+const logout = asyncHandler(async (req, res) => {
+
+    const refreshToken = req.cookies.refreshToken;
+
+    await authService.logout(req.user._id,req.cookies.refreshToken);
+
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "strict"
+    });
+
+    return res.status(200).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            "Logged out successfully"
+        )
+    );
+
+});
+
 module.exports = {
     register,
     login,
+    logout,
     verifyEmail,
     resendVerification,
     refreshToken
