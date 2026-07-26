@@ -1,7 +1,11 @@
 function App() {
-    return (
-        <h1>TaskFlow</h1>
-    );
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <h1 className="text-5xl font-bold text-white">
+        TaskEm 🚀
+      </h1>
+    </div>
+  );
 }
 
 export default App;
