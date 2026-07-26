@@ -46,7 +46,73 @@ const getTasks = asyncHandler(async (req, res) => {
 
 });
 
+const getTask = asyncHandler(async (req, res) => {
+
+    const task =
+        await taskService.getById(
+            req.user._id,
+            req.params.id
+        );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Task fetched successfully",
+            task
+        )
+
+    );
+
+});
+
+const updateTask = asyncHandler(async (req, res) => {
+
+    const task =
+        await taskService.update(
+
+            req.user._id,
+
+            req.params.id,
+
+            req.body
+
+        );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Task updated successfully",
+            task
+        )
+
+    );
+
+});
+
+const deleteTask = asyncHandler(async (req, res) => {
+
+    await taskService.archive(
+        req.user._id,
+        req.params.id
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Task deleted successfully"
+        )
+
+    );
+
+});
+
 module.exports = {
     createTask,
-    getTasks
+    getTasks,
+    getTask,
+    updateTask,
+    deleteTask
 };
