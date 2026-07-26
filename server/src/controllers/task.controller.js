@@ -26,6 +26,27 @@ const createTask = asyncHandler(async (req, res) => {
 
 });
 
+const getTasks = asyncHandler(async (req, res) => {
+
+    const result =
+        await taskService.getAll(
+            req.user._id,
+            req.query
+        );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            "Tasks fetched successfully",
+            result
+        )
+
+    );
+
+});
+
 module.exports = {
-    createTask
+    createTask,
+    getTasks
 };

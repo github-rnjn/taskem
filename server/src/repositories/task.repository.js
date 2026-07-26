@@ -16,15 +16,41 @@ class TaskRepository {
             .populate("category", "name color icon");
     }
 
-    async findByUser(userId) {
-        return Task.find({
-            createdBy: userId,
-            isArchived: false,
-        })
-            .populate("category", "name color icon")
-            .sort({
-                createdAt: -1,
-            });
+    async findAll(userId, filters, options) {
+
+        const {
+            page,
+            limit,
+            sort
+        } = options;
+
+        const skip = (page - 1) * limit;
+
+        const [tasks, total] = await Promise.all([
+
+            Task.find({
+                createdBy: userId,
+                isArchived: false,
+                ...filters
+            })
+                .populate("category", "name color icon")
+                .sort(sort)
+                .skip(skip)
+                .limit(limit),
+
+            Task.countDocuments({
+                createdBy: userId,
+                isArchived: false,
+                ...filters
+            })
+
+        ]);
+
+        return {
+            tasks,
+            total
+        };
+
     }
 
     async findByIdAndUser(categoryId, userId) {
