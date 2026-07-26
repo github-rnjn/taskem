@@ -7,33 +7,32 @@ class CategoryRepository {
     }
 
     async findByUser(userId) {
-        return Category.find({
-            createdBy: userId
-        }).sort({
-            createdAt: 1
-        });
+        return Category.find({ createdBy: userId });
     }
 
     async findById(id) {
         return Category.findById(id);
     }
 
+    async findByIdAndUser(categoryId, userId) {
+        return Category.findOne({
+            _id: categoryId,
+            createdBy: userId,
+        });
+    }
+
     async findByUserAndNormalizedName(userId, normalizedName) {
         return Category.findOne({
             createdBy: userId,
-            normalizedName
+            normalizedName,
         });
     }
 
     async update(id, data) {
-        return Category.findByIdAndUpdate(
-            id,
-            data,
-            {
-                new: true,
-                runValidators: true
-            }
-        );
+        return Category.findByIdAndUpdate(id, data, {
+            new: true,
+            runValidators: true,
+        });
     }
 
     async delete(id) {

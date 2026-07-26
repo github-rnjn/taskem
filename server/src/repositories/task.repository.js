@@ -3,7 +3,12 @@ const Task = require("../models/task.model");
 class TaskRepository {
 
     async create(data) {
-        return Task.create(data);
+
+        const task = await Task.create(data);
+
+        return Task.findById(task._id)
+            .populate("category", "name color icon");
+
     }
 
     async findById(id) {
@@ -22,6 +27,12 @@ class TaskRepository {
             });
     }
 
+    async findByIdAndUser(categoryId, userId) {
+        return Category.findOne({
+            _id: categoryId,
+            createdBy: userId
+        });
+    }
 }
 
 module.exports = new TaskRepository();
