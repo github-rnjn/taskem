@@ -17,7 +17,16 @@ const verifyEmailSchema = z.object({
         .length(6)
 });
 
+const resendVerificationSchema = z.object({
+    email: z
+        .string()
+        .trim()
+        .email()
+});
+
+
 module.exports = {
     registerSchema,
-    verifyEmailSchema
+    verifyEmailSchema,
+    resendVerificationSchema
 };

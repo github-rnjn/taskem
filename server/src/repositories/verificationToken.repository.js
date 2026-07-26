@@ -9,8 +9,10 @@ class VerificationTokenRepository {
     async findByUser(userId, type) {
         return VerificationToken.findOne({
             user: userId,
-            type,
-        }).select("+tokenHash");
+            type
+        })
+        .select("+tokenHash")
+        .sort({ createdAt: -1 });
     }
 
     async deleteByUser(userId, type) {

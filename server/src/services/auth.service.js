@@ -91,6 +91,60 @@ class AuthService {
 
         return verifiedUser;
     }
+
+    async resendVerification(email) {
+
+        const user = await authRepository.findByEmail(email);
+
+        if (!user) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "User not found"
+            );
+        }
+
+        if (user.isVerified) {
+            throw new ApiError(
+                HTTP_STATUS.CONFLICT,
+                "Email already verified"
+            );
+        }
+
+        // Check if a verification token already exists
+        const existingToken =
+            await verificationTokenRepository.findByUser(
+                user._id,
+                TOKEN_TYPES.EMAIL_VERIFICATION
+            );
+
+        // Prevent resending within 30 seconds
+        if (
+            existingToken &&
+            Date.now() - existingToken.createdAt.getTime() < 30 * 1000
+        ) {
+            throw new ApiError(
+                HTTP_STATUS.TOO_MANY_REQUESTS,
+                "Please wait 30 seconds before requesting another verification code."
+            );
+        }
+
+        // Remove old token
+        await verificationTokenRepository.deleteByUser(
+            user._id,
+            TOKEN_TYPES.EMAIL_VERIFICATION
+        );
+
+        const otp = generateNumericOTP();
+
+        await verificationTokenRepository.create({
+            user: user._id,
+            tokenHash: hashToken(otp),
+            type: TOKEN_TYPES.EMAIL_VERIFICATION,
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000)
+        });
+
+        await emailService.sendVerificationEmail(user, otp);
+    }
 }
 
 module.exports = new AuthService();

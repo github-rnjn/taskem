@@ -20,4 +20,10 @@ router.post(
     verifyEmail
 );
 
+router.post(
+    "/resend-verification",
+    validate(resendVerificationSchema),
+    resendVerification
+);
+
 module.exports = router;

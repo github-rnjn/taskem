@@ -41,7 +41,21 @@ const verifyEmail = asyncHandler(async (req, res) => {
 
 });
 
+const resendVerification = asyncHandler(async (req, res) => {
+
+    await authService.resendVerification(req.body.email);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Verification code sent successfully"
+        )
+    );
+
+});
+
 module.exports = {
     register,
-    verifyEmail
+    verifyEmail,
+    resendVerification
 };
