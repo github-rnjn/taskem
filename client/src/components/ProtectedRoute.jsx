@@ -3,9 +3,22 @@ import { useSelector } from "react-redux";
 
 export default function ProtectedRoute({ children }) {
 
-    const isAuthenticated = useSelector(
-        state => state.auth.isAuthenticated
+    const {
+        loading,
+        isAuthenticated,
+    } = useSelector(
+        state => state.auth
     );
+
+    if (loading) {
+
+        return (
+            <div className="flex h-screen items-center justify-center">
+                Loading...
+            </div>
+        );
+
+    }
 
     if (!isAuthenticated) {
 

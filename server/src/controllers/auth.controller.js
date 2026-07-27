@@ -105,31 +105,30 @@ const refreshToken = asyncHandler(async (req, res) => {
 
     const token = req.cookies.refreshToken;
 
-    const result =
-        await authService.refreshToken(token);
+    const result = await authService.refreshToken(token);
 
-    res.cookie(
-        "refreshToken",
-        result.refreshToken,
-        {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        }
-    );
+    res.cookie("refreshToken", result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
-    return new ApiResponse(
-        HTTP_STATUS.OK,
-        "Token refreshed successfully",
-        {
-            accessToken,
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-            },
-        }
+    return res.status(HTTP_STATUS.OK).json(
+
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            "Token refreshed successfully",
+            {
+                accessToken: result.accessToken,
+                user: {
+                    id: result.user._id,
+                    name: result.user.name,
+                    email: result.user.email,
+                },
+            }
+        )
+
     );
 
 });

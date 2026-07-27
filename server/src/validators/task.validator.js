@@ -30,7 +30,7 @@ const createTaskSchema = z.object({
 
     dueDate: z
         .string()
-        .datetime()
+        .date()
         .optional(),
 
     category: z
@@ -64,7 +64,7 @@ const updateTaskSchema = z.object({
         "COMPLETED"
     ]).optional(),
 
-    dueDate: z.string().datetime().optional(),
+    dueDate: z.string().date().optional(),
 
     category: z.string().optional(),
 

@@ -7,6 +7,8 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { store } from "./redux/store";
 
+import AuthProvider from "./components/AuthProvider";
+
 import "./index.css";
 
 import App from "./App";
@@ -18,8 +20,9 @@ ReactDOM.createRoot(
     <React.StrictMode>
 
         <Provider store={store}>
-
+          <AuthProvider>
             <App />
+          </AuthProvider>
 
             <Toaster
                 richColors

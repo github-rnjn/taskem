@@ -235,6 +235,15 @@ class AuthService {
             await sessionRepository.findByRefreshTokenHash(
                 tokenHash
             );
+        
+        const user = await authRepository.findById(payload.id);
+
+        if (!user) {
+            throw new ApiError(
+                HTTP_STATUS.UNAUTHORIZED,
+                "User not found"
+            );
+        }
 
         if (!session) {
             throw new ApiError(
@@ -272,6 +281,7 @@ class AuthService {
         );
 
         return {
+            user,
             accessToken: newAccessToken,
             refreshToken: newRefreshToken
         };
