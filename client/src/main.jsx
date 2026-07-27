@@ -1,19 +1,33 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
 
-import { store } from './app/store';
+import { Toaster } from "@/components/ui/sonner";
 
-import App from './App.jsx'
+import { store } from "./redux/store";
 
+import "./index.css";
 
+import App from "./App";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Provider store={store}>
-        <App />
-    </Provider>
-  </StrictMode>,
-)
+ReactDOM.createRoot(
+    document.getElementById("root")
+).render(
+
+    <React.StrictMode>
+
+        <Provider store={store}>
+
+            <App />
+
+            <Toaster
+                richColors
+                position="top-right"
+            />
+
+        </Provider>
+
+    </React.StrictMode>
+
+);
