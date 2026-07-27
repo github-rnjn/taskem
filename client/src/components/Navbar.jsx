@@ -1,30 +1,26 @@
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
 
-    const user = useSelector(
-        state => state.auth.user
-    );
-
     return (
 
-        <nav className="border-b bg-white">
+        <nav className="flex gap-4 p-4 border-b">
 
-            <div className="mx-auto flex h-16 items-center justify-between px-6">
+            <Link to="/dashboard">
+                Dashboard
+            </Link>
 
-                <h1 className="text-2xl font-bold">
+            <Link to="/tasks">
+                Tasks
+            </Link>
 
-                    Taskem
+            <Link to="/categories">
+                Categories
+            </Link>
 
-                </h1>
-
-                <div className="font-medium">
-
-                    {user?.name}
-
-                </div>
-
-            </div>
+            <Link to="/profile">
+                Profile
+            </Link>
 
         </nav>
 

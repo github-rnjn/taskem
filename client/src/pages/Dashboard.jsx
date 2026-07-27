@@ -10,6 +10,10 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+import SummaryCards from "../components/dashboard/SummaryCards";
+import ProductivityChart from "../components/dashboard/ProductivityChart";
+import CategoryChart from "../components/dashboard/CategoryChart";
+
 export default function Dashboard() {
 
     const [dashboardData, setDashboardData] = useState(null);
@@ -45,7 +49,22 @@ export default function Dashboard() {
     }, []);
 
     if (loading) {
-        return <h1 className="p-6">Loading...</h1>;
+
+        return (
+
+            <>
+                <Navbar />
+
+                <div className="p-8">
+
+                    Loading dashboard...
+
+                </div>
+
+            </>
+
+        );
+
     }
 
     const summary = dashboardData.dashboard;
@@ -62,65 +81,21 @@ export default function Dashboard() {
 
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Total Tasks</CardTitle>
-                        </CardHeader>
+                    <SummaryCards
+                        dashboard={dashboardData.dashboard}
+                    />
 
-                        <CardContent className="text-3xl font-bold">
-                            {summary.totalTasks}
-                        </CardContent>
-                    </Card>
+                    <div className="mt-8 grid gap-6 lg:grid-cols-2">
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Completed</CardTitle>
-                        </CardHeader>
+                        <ProductivityChart
+                            data={dashboardData.productivity}
+                        />
 
-                        <CardContent className="text-3xl font-bold">
-                            {summary.completedTasks}
-                        </CardContent>
-                    </Card>
+                        <CategoryChart
+                            data={dashboardData.categoryBreakdown}
+                        />
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Pending</CardTitle>
-                        </CardHeader>
-
-                        <CardContent className="text-3xl font-bold">
-                            {summary.pendingTasks}
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Overdue</CardTitle>
-                        </CardHeader>
-
-                        <CardContent className="text-3xl font-bold">
-                            {summary.overdueTasks}
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Due Today</CardTitle>
-                        </CardHeader>
-
-                        <CardContent className="text-3xl font-bold">
-                            {summary.dueToday}
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Completion Rate</CardTitle>
-                        </CardHeader>
-
-                        <CardContent className="text-3xl font-bold">
-                            {summary.completionRate}%
-                        </CardContent>
-                    </Card>
+                    </div>
 
                 </div>
 

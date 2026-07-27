@@ -5,6 +5,10 @@ import { Pencil, Trash2, CheckCircle2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import TaskDialog from "../components/TaskDialog";
 
+import { getCategories } from "../api/category";
+
+import useDebounce from "../hooks/useDebounce";
+
 import {
     getTasks,
     createTask,
@@ -28,6 +32,20 @@ export default function Tasks() {
     const [open, setOpen] = useState(false);
 
     const [selectedTask, setSelectedTask] = useState(null);
+    
+    const [search, setSearch] = useState("");
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    const [status, setStatus] = useState("");
+
+    const [category, setCategory] = useState("");
+
+    const [categories, setCategories] = useState([]);
+
+    const [page, setPage] = useState(1);
+
+    const [pagination, setPagination] = useState(null);
 
     async function fetchTasks() {
 
@@ -35,9 +53,16 @@ export default function Tasks() {
 
             setLoading(true);
 
-            const response = await getTasks();
+            const response = await getTasks({
+                page,
+                search: debouncedSearch,
+                status,
+                category,
+            });
 
             setTasks(response.data.data.tasks);
+
+            setPagination(response.data.data.pagination);
 
         }
         catch (error) {
@@ -56,11 +81,40 @@ export default function Tasks() {
 
     }
 
+    async function loadCategories() {
+
+        try {
+
+            const response = await getCategories();
+
+            setCategories(response.data.data);
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+    useEffect(() => {
+
+        loadCategories();
+
+    }, []);
+
+    useEffect(() => {
+
+        setPage(1);
+
+    }, [debouncedSearch, status, category]);
+
     useEffect(() => {
 
         fetchTasks();
 
-    }, []);
+    }, [page, debouncedSearch, status, category]);
 
     async function handleCreate(data) {
 
@@ -171,6 +225,111 @@ export default function Tasks() {
             <Navbar />
 
             <div className="max-w-6xl mx-auto p-6">
+
+                <div className="mb-6 grid gap-4 md:grid-cols-3">
+
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(e) =>
+                            setSearch(e.target.value)
+                        }
+                        className="rounded border p-2"
+                    />
+
+                    <select
+                        value={status}
+                        onChange={(e) =>
+                            setStatus(e.target.value)
+                        }
+                        className="rounded border p-2"
+                    >
+
+                        <option value="">
+
+                            All Status
+
+                        </option>
+
+                        <option value="TODO">
+
+                            TODO
+
+                        </option>
+
+                        <option value="IN_PROGRESS">
+
+                            IN PROGRESS
+
+                        </option>
+
+                        <option value="COMPLETED">
+
+                            COMPLETED
+
+                        </option>
+
+                    </select>
+
+                    <select
+                        value={category}
+                        onChange={(e) =>
+                            setCategory(e.target.value)
+                        }
+                        className="rounded border p-2"
+                    >
+
+                        <option value="">
+
+                            All Categories
+
+                        </option>
+
+                        {categories.map(category => (
+
+                            <option
+                                key={category._id}
+                                value={category._id}
+                            >
+
+                                {category.name}
+
+                            </option>
+
+                        ))}
+
+                    </select>
+
+                </div>
+
+                {pagination && pagination.totalPages > 1 && (
+
+                    <div className="mt-6 flex items-center justify-center gap-4">
+
+                        <Button
+                            variant="outline"
+                            disabled={!pagination.hasPreviousPage}
+                            onClick={() => setPage(prev => prev - 1)}
+                        >
+                            Previous
+                        </Button>
+
+                        <span>
+                            Page {pagination.page} of {pagination.totalPages}
+                        </span>
+
+                        <Button
+                            variant="outline"
+                            disabled={!pagination.hasNextPage}
+                            onClick={() => setPage(prev => prev + 1)}
+                        >
+                            Next
+                        </Button>
+
+                    </div>
+
+                )}
 
                 <div className="flex justify-between items-center mb-6">
 
