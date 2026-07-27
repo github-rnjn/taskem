@@ -10,7 +10,7 @@ const { HTTP_STATUS } = require("../constants");
 const TOKEN_TYPES = require("../constants/tokenTypes");
 
 const { generateNumericOTP, hashToken } = require("../utils/token");
-const {generateAccessToken,generateRefreshToken} = require("../utils/jwt");
+const {generateAccessToken,generateRefreshToken,verifyRefreshToken,verifyAccessToken} = require("../utils/jwt");
 
 class AuthService {
     async register(data) {

@@ -119,16 +119,17 @@ const refreshToken = asyncHandler(async (req, res) => {
         }
     );
 
-    return res.status(200).json(
-
-        new ApiResponse(
-            200,
-            "Token refreshed successfully",
-            {
-                accessToken: result.accessToken
-            }
-        )
-
+    return new ApiResponse(
+        HTTP_STATUS.OK,
+        "Token refreshed successfully",
+        {
+            accessToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            },
+        }
     );
 
 });
