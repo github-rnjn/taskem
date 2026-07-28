@@ -39,16 +39,28 @@ const login = asyncHandler(async (req, res) => {
         deviceInfo
     );
 
+    // res.cookie("refreshToken", result.refreshToken, {
+
+    //     httpOnly: true,
+
+    //     secure: process.env.NODE_ENV === "production",
+
+    //     sameSite: "strict",
+
+    //     maxAge: 7 * 24 * 60 * 60 * 1000
+
+    // });
+
+    //FOR PRODUCTION
+
     res.cookie("refreshToken", result.refreshToken, {
-
         httpOnly: true,
-
         secure: process.env.NODE_ENV === "production",
-
-        sameSite: "strict",
-
-        maxAge: 7 * 24 * 60 * 60 * 1000
-
+        sameSite:
+            process.env.NODE_ENV === "production"
+                ? "none"
+                : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json(
@@ -139,10 +151,20 @@ const logout = asyncHandler(async (req, res) => {
 
     await authService.logout(req.user._id,req.cookies.refreshToken);
 
+    // res.clearCookie("refreshToken", {
+    //     httpOnly: true,
+    //     secure: env.NODE_ENV === "production",
+    //     sameSite: "strict"
+    // });
+
+    //for PRODUCTION
     res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: env.NODE_ENV === "production",
-        sameSite: "strict"
+        secure: process.env.NODE_ENV === "production",
+        sameSite:
+            process.env.NODE_ENV === "production"
+                ? "none"
+                : "lax",
     });
 
     return res.status(200).json(
