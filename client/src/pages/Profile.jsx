@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Loader from "@/components/Loader";
 
 export default function Profile() {
 
@@ -165,21 +166,11 @@ export default function Profile() {
     }
 
     if (loading) {
-
         return (
-
             <>
-                <Navbar />
-
-                <div className="flex h-[70vh] items-center justify-center">
-                    <p className="text-lg text-gray-500">
-                        Loading profile...
-                    </p>
-                </div>
+                <Loader text="Loading dashboard..." />
             </>
-
         );
-
     }
 
     return (

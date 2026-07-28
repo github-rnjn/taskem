@@ -17,6 +17,7 @@ import {
     Card,
     CardContent,
 } from "@/components/ui/card";
+import Loader from "@/components/Loader";
 
 export default function Categories() {
 
@@ -178,13 +179,7 @@ export default function Categories() {
 
                 {loading ? (
 
-                    <div className="flex justify-center py-20">
-
-                        <p className="text-lg text-gray-500">
-                            Loading categories...
-                        </p>
-
-                    </div>
+                    <Loader text="Loading Categories..." />
 
                 ) : categories.length === 0 ? (
 
