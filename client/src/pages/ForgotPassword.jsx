@@ -63,19 +63,35 @@ export default function ForgotPassword() {
 
     return (
 
-        <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 flex items-center justify-center px-4">
 
-            <Card className="w-full max-w-md">
+            <Card className="w-full max-w-md rounded-3xl border-0 shadow-2xl">
 
-                <CardHeader>
+                <CardHeader className="text-center space-y-4">
 
-                    <CardTitle>
-                        Forgot Password
-                    </CardTitle>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg">
 
-                    <CardDescription>
-                        Enter your registered email.
-                    </CardDescription>
+                        <span className="text-4xl">
+                            🔒
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <CardTitle className="text-3xl font-bold">
+
+                            Forgot Password
+
+                        </CardTitle>
+
+                        <CardDescription className="mt-2 text-base">
+
+                            Enter your registered email and we'll send you a verification code.
+
+                        </CardDescription>
+
+                    </div>
 
                 </CardHeader>
 
@@ -83,32 +99,78 @@ export default function ForgotPassword() {
 
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="space-y-4"
+                        className="space-y-6"
                     >
 
                         <div>
 
-                            <Label>Email</Label>
+                            <Label className="mb-2 block">
+
+                                Email Address
+
+                            </Label>
 
                             <Input
                                 type="email"
+                                placeholder="you@example.com"
+                                className="h-12 rounded-xl"
                                 {...register("email")}
                             />
 
                         </div>
 
                         <Button
-                            className="w-full"
-                            disabled={loading}
                             type="submit"
+                            disabled={loading}
+                            className="
+                                w-full
+                                h-12
+                                rounded-xl
+                                bg-gradient-to-r
+                                from-blue-600
+                                to-indigo-600
+                                hover:from-blue-700
+                                hover:to-indigo-700
+                                shadow-lg
+                                hover:shadow-xl
+                                transition-all
+                                duration-300
+                            "
                         >
 
-                            {loading
-                                ? <Loader2 className="animate-spin" />
-                                : "Send OTP"
-                            }
+                            {loading ? (
+
+                                <>
+
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+
+                                    Sending OTP...
+
+                                </>
+
+                            ) : (
+
+                                "Send OTP"
+
+                            )}
 
                         </Button>
+
+                        <p className="text-center text-sm text-gray-600">
+
+                            Remember your password?{" "}
+
+                            <button
+                                type="button"
+                                onClick={() => navigate("/login")}
+                                className="font-semibold text-blue-600 hover:underline"
+                            >
+
+                                Back to Login
+
+                            </button>
+
+                        </p>
 
                     </form>
 

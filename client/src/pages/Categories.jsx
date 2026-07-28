@@ -140,22 +140,29 @@ export default function Categories() {
     }
 
     return (
-
         <>
-
             <Navbar />
 
-            <div className="mx-auto max-w-5xl p-6">
+            <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 px-4 md:px-8 py-8">
 
-                <div className="mb-6 flex items-center justify-between">
+                {/* Header */}
+                <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-                    <h1 className="text-3xl font-bold">
+                    <div>
 
-                        Categories
+                        <h1 className="text-4xl font-bold text-slate-800">
+                            Categories
+                        </h1>
 
-                    </h1>
+                        <p className="mt-2 text-gray-500">
+                            Organize your tasks using colorful categories.
+                        </p>
+
+                    </div>
 
                     <Button
+                        size="lg"
+                        className="rounded-xl bg-blue-600 hover:bg-blue-700 shadow-lg"
                         onClick={() => {
 
                             setSelectedCategory(null);
@@ -164,24 +171,51 @@ export default function Categories() {
 
                         }}
                     >
-
                         + Add Category
-
                     </Button>
 
                 </div>
 
                 {loading ? (
 
-                    <p>Loading...</p>
+                    <div className="flex justify-center py-20">
+
+                        <p className="text-lg text-gray-500">
+                            Loading categories...
+                        </p>
+
+                    </div>
 
                 ) : categories.length === 0 ? (
 
-                    <Card>
+                    <Card className="rounded-2xl shadow-lg">
 
-                        <CardContent className="py-10 text-center text-gray-500">
+                        <CardContent className="flex flex-col items-center justify-center py-16">
 
-                            No categories found.
+                            <div className="text-6xl mb-4">
+                                📂
+                            </div>
+
+                            <h2 className="text-2xl font-semibold">
+                                No Categories Yet
+                            </h2>
+
+                            <p className="mt-2 text-gray-500">
+                                Create your first category to organize tasks.
+                            </p>
+
+                            <Button
+                                className="mt-6 rounded-xl bg-blue-600 hover:bg-blue-700"
+                                onClick={() => {
+
+                                    setSelectedCategory(null);
+
+                                    setOpen(true);
+
+                                }}
+                            >
+                                Create Category
+                            </Button>
 
                         </CardContent>
 
@@ -189,71 +223,72 @@ export default function Categories() {
 
                 ) : (
 
-                    <div className="space-y-4">
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
                         {categories.map((category) => (
 
                             <Card
                                 key={category._id}
+                                className="rounded-2xl border-0 shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
                             >
 
-                                <CardContent className="flex items-center justify-between py-4">
+                                <CardContent className="p-6">
 
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center justify-between">
 
-                                        <div
-                                            className="h-5 w-5 rounded-full"
-                                            style={{
-                                                backgroundColor:
-                                                    category.color,
-                                            }}
-                                        />
+                                        <div className="flex items-center gap-4">
 
-                                        <span className="font-medium">
-
-                                            {category.name}
-
-                                        </span>
-
-                                    </div>
-
-                                    <div className="flex gap-2">
-
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            onClick={() => {
-
-                                                setSelectedCategory(
-                                                    category
-                                                );
-
-                                                setOpen(true);
-
-                                            }}
-                                        >
-
-                                            <Pencil
-                                                size={16}
+                                            <div
+                                                className="h-12 w-12 rounded-full shadow"
+                                                style={{
+                                                    backgroundColor:
+                                                        category.color,
+                                                }}
                                             />
 
-                                        </Button>
+                                            <div>
 
-                                        <Button
-                                            variant="destructive"
-                                            size="icon"
-                                            onClick={() =>
-                                                handleDelete(
-                                                    category._id
-                                                )
-                                            }
-                                        >
+                                                <h2 className="text-lg font-semibold">
+                                                    {category.name}
+                                                </h2>
 
-                                            <Trash2
-                                                size={16}
-                                            />
+                                                <p className="text-sm text-gray-500">
+                                                    Task Category
+                                                </p>
 
-                                        </Button>
+                                            </div>
+
+                                        </div>
+
+                                        <div className="flex gap-2">
+
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="rounded-xl hover:bg-blue-50"
+                                                onClick={() => {
+
+                                                    setSelectedCategory(category);
+
+                                                    setOpen(true);
+
+                                                }}
+                                            >
+                                                <Pencil size={18} />
+                                            </Button>
+
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="rounded-xl"
+                                                onClick={() =>
+                                                    handleDelete(category._id)
+                                                }
+                                            >
+                                                <Trash2 size={18} />
+                                            </Button>
+
+                                        </div>
 
                                     </div>
 
@@ -267,7 +302,7 @@ export default function Categories() {
 
                 )}
 
-            </div>
+            </main>
 
             <CategoryDialog
                 open={open}
@@ -279,9 +314,7 @@ export default function Categories() {
                         : handleCreate
                 }
             />
-
         </>
-
     );
 
 }

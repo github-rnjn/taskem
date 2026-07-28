@@ -125,47 +125,79 @@ export default function VerifyEmail() {
 
     return (
 
-        <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 flex items-center justify-center px-4">
 
-            <Card className="w-full max-w-md">
+            <Card className="w-full max-w-md rounded-3xl border-0 shadow-2xl">
 
-                <CardHeader>
+                <CardHeader className="text-center space-y-4">
 
-                    <CardTitle>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg">
 
-                        Verify Email
-
-                    </CardTitle>
-
-                    <CardDescription>
-
-                        Enter the verification code sent to your email.
-
-                    </CardDescription>
-
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-
-                    <div>
-
-                        <Label>Email</Label>
-
-                        <Input
-                            value={email}
-                            disabled
-                        />
+                        📧
 
                     </div>
 
                     <div>
 
-                        <Label>Verification Code</Label>
+                        <CardTitle className="text-3xl font-bold">
+
+                            Verify Your Email
+
+                        </CardTitle>
+
+                        <CardDescription className="mt-2 text-base">
+
+                            We've sent a 6-digit verification code to your email.
+
+                        </CardDescription>
+
+                    </div>
+
+                </CardHeader>
+
+                <CardContent className="space-y-6">
+
+                    {/* Email */}
+
+                    <div>
+
+                        <Label className="mb-2 block">
+
+                            Email Address
+
+                        </Label>
+
+                        <Input
+                            value={email}
+                            disabled
+                            className="h-12 rounded-xl bg-slate-100"
+                        />
+
+                    </div>
+
+                    {/* OTP */}
+
+                    <div>
+
+                        <Label className="mb-2 block">
+
+                            Verification Code
+
+                        </Label>
 
                         <Input
                             value={otp}
                             maxLength={6}
                             inputMode="numeric"
+                            placeholder="Enter 6-digit OTP"
+                            className="
+                                h-12
+                                rounded-xl
+                                text-center
+                                text-2xl
+                                tracking-[0.5em]
+                                font-semibold
+                            "
                             onChange={(e) =>
                                 setOtp(
                                     e.target.value.replace(/\D/g, "")
@@ -173,39 +205,105 @@ export default function VerifyEmail() {
                             }
                         />
 
+                        <p className="mt-2 text-xs text-gray-500">
+
+                            Check your inbox and spam folder.
+
+                        </p>
+
                     </div>
 
+                    {/* Verify */}
+
                     <Button
-                        className="w-full"
                         onClick={handleVerify}
                         disabled={loading}
+                        className="
+                            w-full
+                            h-12
+                            rounded-xl
+                            bg-gradient-to-r
+                            from-blue-600
+                            to-indigo-600
+                            hover:from-blue-700
+                            hover:to-indigo-700
+                            shadow-lg
+                        "
                     >
 
-                        {loading
-                            ? <Loader2 className="animate-spin" />
-                            : "Verify Email"
-                        }
+                        {loading ? (
+
+                            <>
+
+                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+
+                                Verifying...
+
+                            </>
+
+                        ) : (
+
+                            "Verify Email"
+
+                        )}
 
                     </Button>
 
-                    <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={handleResend}
-                        disabled={
-                            countdown > 0 ||
-                            resendLoading
-                        }
-                    >
+                    {/* Countdown */}
 
-                        {resendLoading
-                            ? <Loader2 className="animate-spin" />
-                            : countdown > 0
-                                ? `Resend OTP (${countdown}s)`
-                                : "Resend OTP"
-                        }
+                    {countdown > 0 ? (
 
-                    </Button>
+                        <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-center">
+
+                            <p className="text-sm text-amber-700">
+
+                                You can resend the code in{" "}
+
+                                <span className="font-bold">
+
+                                    {countdown}s
+
+                                </span>
+
+                            </p>
+
+                        </div>
+
+                    ) : (
+
+                        <Button
+                            variant="outline"
+                            className="
+                                w-full
+                                h-12
+                                rounded-xl
+                                border-blue-500
+                                text-blue-600
+                                hover:bg-blue-50
+                            "
+                            onClick={handleResend}
+                            disabled={resendLoading}
+                        >
+
+                            {resendLoading ? (
+
+                                <>
+
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+
+                                    Sending...
+
+                                </>
+
+                            ) : (
+
+                                "Resend Verification Code"
+
+                            )}
+
+                        </Button>
+
+                    )}
 
                 </CardContent>
 

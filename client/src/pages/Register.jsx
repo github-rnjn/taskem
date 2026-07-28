@@ -71,17 +71,27 @@ export default function Register() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+        <div className="min-h-screen bg-linear-to-br from-blue-100 via-white to-indigo-100 flex items-center justify-center px-4 py-10">
 
-            <Card className="w-full max-w-md">
+            <Card className="w-full max-w-md rounded-3xl border-0 shadow-2xl">
 
-                <CardHeader>
+                <CardHeader className="space-y-4 text-center">
 
-                    <CardTitle>Create Account</CardTitle>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-4xl font-bold text-white shadow-lg">
+                        👤
+                    </div>
 
-                    <CardDescription>
-                        Register to continue
-                    </CardDescription>
+                    <div>
+
+                        <CardTitle className="text-3xl font-bold">
+                            Create Account
+                        </CardTitle>
+
+                        <CardDescription className="mt-2 text-base">
+                            Create an account to start managing your tasks.
+                        </CardDescription>
+
+                    </div>
 
                 </CardHeader>
 
@@ -89,43 +99,62 @@ export default function Register() {
 
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="space-y-4"
+                        className="space-y-5"
                     >
 
+                        {/* Name */}
                         <div>
-                            <Label>Name</Label>
+
+                            <Label className="mb-2 block">
+                                Name
+                            </Label>
 
                             <Input
+                                className="h-12 rounded-xl"
+                                placeholder="John Doe"
                                 {...register("name")}
                             />
 
                             {errors.name && (
-                                <p className="mt-1 text-sm text-red-500">
+
+                                <p className="mt-2 text-sm text-red-500">
                                     {errors.name.message}
                                 </p>
+
                             )}
+
                         </div>
 
+                        {/* Email */}
                         <div>
 
-                            <Label>Email</Label>
+                            <Label className="mb-2 block">
+                                Email
+                            </Label>
 
                             <Input
                                 type="email"
+                                className="h-12 rounded-xl"
+                                placeholder="john@example.com"
                                 {...register("email")}
                             />
 
                             {errors.email && (
-                                <p className="mt-1 text-sm text-red-500">
+
+                                <p className="mt-2 text-sm text-red-500">
                                     {errors.email.message}
                                 </p>
+
                             )}
 
                         </div>
 
+                        {/* Password */}
                         <div>
 
-                            <Label>Password</Label>
+                            <Label className="mb-2 block">
+                                Password
+                            </Label>
 
                             <div className="relative">
 
@@ -135,38 +164,43 @@ export default function Register() {
                                             ? "text"
                                             : "password"
                                     }
+                                    className="h-12 rounded-xl pr-12"
+                                    placeholder="Create a password"
                                     {...register("password")}
                                 />
 
                                 <button
                                     type="button"
-                                    className="absolute right-3 top-3"
                                     onClick={() =>
-                                        setShowPassword(
-                                            !showPassword
-                                        )
+                                        setShowPassword(!showPassword)
                                     }
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600"
                                 >
-                                    {showPassword ? (
-                                        <EyeOff size={18} />
-                                    ) : (
-                                        <Eye size={18} />
-                                    )}
+
+                                    {showPassword
+                                        ? <EyeOff size={20} />
+                                        : <Eye size={20} />}
+
                                 </button>
 
                             </div>
 
                             {errors.password && (
-                                <p className="mt-1 text-sm text-red-500">
+
+                                <p className="mt-2 text-sm text-red-500">
                                     {errors.password.message}
                                 </p>
+
                             )}
 
                         </div>
 
+                        {/* Confirm Password */}
                         <div>
 
-                            <Label>Confirm Password</Label>
+                            <Label className="mb-2 block">
+                                Confirm Password
+                            </Label>
 
                             <div className="relative">
 
@@ -176,57 +210,98 @@ export default function Register() {
                                             ? "text"
                                             : "password"
                                     }
+                                    className="h-12 rounded-xl pr-12"
+                                    placeholder="Confirm your password"
                                     {...register("confirmPassword")}
                                 />
 
                                 <button
                                     type="button"
-                                    className="absolute right-3 top-3"
                                     onClick={() =>
                                         setShowConfirmPassword(
                                             !showConfirmPassword
                                         )
                                     }
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600"
                                 >
-                                    {showConfirmPassword ? (
-                                        <EyeOff size={18} />
-                                    ) : (
-                                        <Eye size={18} />
-                                    )}
+
+                                    {showConfirmPassword
+                                        ? <EyeOff size={20} />
+                                        : <Eye size={20} />}
+
                                 </button>
 
                             </div>
 
                             {errors.confirmPassword && (
-                                <p className="mt-1 text-sm text-red-500">
-                                    {
-                                        errors.confirmPassword
-                                            .message
-                                    }
+
+                                <p className="mt-2 text-sm text-red-500">
+                                    {errors.confirmPassword.message}
                                 </p>
+
                             )}
 
                         </div>
 
+                        {/* Register Button */}
                         <Button
-                            className="w-full"
-                            disabled={loading}
                             type="submit"
+                            disabled={loading}
+                            className="
+                                w-full
+                                h-12
+                                rounded-xl
+                                bg-gradient-to-r
+                                from-blue-600
+                                to-indigo-600
+                                hover:from-blue-700
+                                hover:to-indigo-700
+                                transition-all
+                                duration-300
+                                hover:shadow-xl
+                                hover:-translate-y-0.5
+                            "
                         >
+
                             {loading ? (
-                                <Loader2 className="animate-spin" />
+
+                                <>
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    Creating Account...
+                                </>
+
                             ) : (
-                                "Register"
+
+                                "Create Account"
+
                             )}
+
                         </Button>
 
-                        <p className="text-center text-sm">
+                        {/* Divider */}
+                        <div className="relative">
+
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t" />
+                            </div>
+
+                            <div className="relative flex justify-center text-xs uppercase">
+
+                                <span className="bg-white px-2 text-gray-500">
+                                    OR
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <p className="text-center text-sm text-gray-600">
 
                             Already have an account?{" "}
 
                             <Link
                                 to="/login"
-                                className="text-blue-600 hover:underline"
+                                className="font-semibold text-blue-600 hover:underline"
                             >
                                 Login
                             </Link>

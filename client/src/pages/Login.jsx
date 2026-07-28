@@ -77,20 +77,27 @@ export default function Login() {
     }
 
     return (
+        <div className="min-h-screen bg-linear-to-br from-blue-100 via-white to-indigo-100 flex items-center justify-center px-4">
 
-        <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+            <Card className="w-full max-w-md rounded-3xl shadow-2xl border-0">
 
-            <Card className="w-full max-w-md">
+                <CardHeader className="text-center space-y-4">
 
-                <CardHeader>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 text-4xl font-bold text-white shadow-lg">
+                        ✓
+                    </div>
 
-                    <CardTitle>
-                        Login
-                    </CardTitle>
+                    <div>
 
-                    <CardDescription>
-                        Login to continue
-                    </CardDescription>
+                        <CardTitle className="text-3xl font-bold">
+                            Welcome Back
+                        </CardTitle>
+
+                        <CardDescription className="mt-2 text-base">
+                            Login to continue managing your tasks.
+                        </CardDescription>
+
+                    </div>
 
                 </CardHeader>
 
@@ -98,24 +105,26 @@ export default function Login() {
 
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="space-y-4"
+                        className="space-y-6"
                     >
 
                         <div>
 
-                            <Label>Email</Label>
+                            <Label className="mb-2 block">
+                                Email
+                            </Label>
 
                             <Input
                                 type="email"
+                                placeholder="you@example.com"
+                                className="h-12 rounded-xl"
                                 {...register("email")}
                             />
 
                             {errors.email && (
 
-                                <p className="text-sm text-red-500 mt-1">
-
+                                <p className="mt-2 text-sm text-red-500">
                                     {errors.email.message}
-
                                 </p>
 
                             )}
@@ -124,7 +133,9 @@ export default function Login() {
 
                         <div>
 
-                            <Label>Password</Label>
+                            <Label className="mb-2 block">
+                                Password
+                            </Label>
 
                             <div className="relative">
 
@@ -134,22 +145,22 @@ export default function Login() {
                                             ? "text"
                                             : "password"
                                     }
+                                    placeholder="Enter your password"
+                                    className="h-12 rounded-xl pr-12"
                                     {...register("password")}
                                 />
 
                                 <button
                                     type="button"
-                                    className="absolute right-3 top-3"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600"
                                     onClick={() =>
-                                        setShowPassword(
-                                            !showPassword
-                                        )
+                                        setShowPassword(!showPassword)
                                     }
                                 >
 
                                     {showPassword
-                                        ? <EyeOff size={18} />
-                                        : <Eye size={18} />
+                                        ? <EyeOff size={20} />
+                                        : <Eye size={20} />
                                     }
 
                                 </button>
@@ -158,10 +169,8 @@ export default function Login() {
 
                             {errors.password && (
 
-                                <p className="text-sm text-red-500 mt-1">
-
+                                <p className="mt-2 text-sm text-red-500">
                                     {errors.password.message}
-
                                 </p>
 
                             )}
@@ -172,7 +181,7 @@ export default function Login() {
 
                             <Link
                                 to="/forgot-password"
-                                className="text-sm text-blue-600 hover:underline"
+                                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
                             >
                                 Forgot Password?
                             </Link>
@@ -181,26 +190,60 @@ export default function Login() {
 
                         <Button
                             type="submit"
-                            className="w-full"
                             disabled={loading}
+                            className="
+                                w-full
+                                h-12
+                                rounded-xl
+                                bg-blue-600
+                                hover:bg-blue-700
+                                transition-all
+                                duration-300
+                                hover:shadow-xl
+                                hover:-translate-y-0.5
+                            "
                         >
 
-                            {loading
-                                ? <Loader2 className="animate-spin" />
-                                : "Login"
-                            }
+                            {loading ? (
+
+                                <>
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    Signing In...
+                                </>
+
+                            ) : (
+
+                                "Login"
+
+                            )}
 
                         </Button>
 
-                        <p className="text-center text-sm">
+                        <div className="relative">
+
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t" />
+                            </div>
+
+                            <div className="relative flex justify-center text-xs uppercase">
+
+                                <span className="bg-white px-2 text-gray-500">
+                                    OR
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <p className="text-center text-sm text-gray-600">
 
                             Don't have an account?{" "}
 
                             <Link
                                 to="/register"
-                                className="text-blue-600 hover:underline"
+                                className="font-semibold text-blue-600 hover:underline"
                             >
-                                Register
+                                Create one
                             </Link>
 
                         </p>
@@ -212,7 +255,6 @@ export default function Login() {
             </Card>
 
         </div>
-
     );
 
 }

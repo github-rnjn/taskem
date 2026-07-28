@@ -244,7 +244,7 @@ class TaskService {
 
     }
 
-    async delete(userId, taskId) {
+    async archive(userId, taskId) {
 
         const task =
             await taskRepository.findByIdAndUser(
@@ -259,7 +259,7 @@ class TaskService {
             );
         }
 
-        await taskRepository.delete(taskId);
+        await taskRepository.archive(taskId,userId);
 
     }
 }

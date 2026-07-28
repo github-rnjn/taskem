@@ -171,10 +171,10 @@ export default function Profile() {
             <>
                 <Navbar />
 
-                <div className="p-8">
-
-                    Loading...
-
+                <div className="flex h-[70vh] items-center justify-center">
+                    <p className="text-lg text-gray-500">
+                        Loading profile...
+                    </p>
                 </div>
             </>
 
@@ -183,164 +183,241 @@ export default function Profile() {
     }
 
     return (
-
         <>
-
             <Navbar />
 
-            <div className="max-w-xl mx-auto p-6 space-y-8">
+            <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 px-4 md:px-8 py-8">
 
-                <div className="text-center">
+                {/* Header */}
+                <div className="mb-10">
 
-                    <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 text-3xl font-bold">
+                    <h1 className="text-4xl font-bold">
+                        My Profile
+                    </h1>
 
-                        {profile.name[0].toUpperCase()}
-
-                    </div>
-
-                    <h2 className="text-2xl font-bold">
-
-                        {profile.name}
-
-                    </h2>
-
-                    <p className="text-gray-500">
-
-                        {profile.email}
-
+                    <p className="text-gray-500 mt-2">
+                        Manage your account settings and security.
                     </p>
 
                 </div>
 
-                <form
-                    onSubmit={handleUpdateProfile}
-                    className="space-y-4"
-                >
+                <div className="grid gap-8 lg:grid-cols-3">
 
-                    <Label>
+                    {/* Left Column */}
+                    <div className="lg:col-span-1">
 
-                        Name
+                        <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-2xl p-8 text-center">
 
-                    </Label>
+                            <div className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-white/20 backdrop-blur text-4xl font-bold border border-white/30">
 
-                    <Input
-                        value={name}
-                        onChange={(e)=>
-                            setName(
-                                e.target.value
-                            )
-                        }
-                    />
+                                {profile.name[0].toUpperCase()}
 
-                    <Button type="submit">
+                            </div>
 
-                        Update Profile
+                            <h2 className="text-2xl font-bold">
 
-                    </Button>
+                                {profile.name}
 
-                </form>
+                            </h2>
 
-                <form
-                    onSubmit={handleChangePassword}
-                    className="space-y-4"
-                >
+                            <p className="mt-2 text-blue-100">
 
-                    <Label>
+                                {profile.email}
 
-                        Current Password
+                            </p>
 
-                    </Label>
+                        </div>
 
-                    <Input
-                        type="password"
-                        value={
-                            passwords.currentPassword
-                        }
-                        onChange={(e)=>
+                    </div>
 
-                            setPasswords({
+                    {/* Right Column */}
+                    <div className="space-y-8 lg:col-span-2">
 
-                                ...passwords,
+                        {/* Update Profile */}
+                        <div className="rounded-3xl border-l-8 border-blue-500 bg-white shadow-xl p-6">
 
-                                currentPassword:
-                                    e.target.value,
+                            <h2 className="text-xl font-semibold mb-6">
+                                Profile Information
+                            </h2>
 
-                            })
+                            <form
+                                onSubmit={handleUpdateProfile}
+                                className="space-y-5"
+                            >
 
-                        }
-                    />
+                                <div>
 
-                    <Label>
+                                    <Label>
+                                        Name
+                                    </Label>
 
-                        New Password
+                                    <Input
+                                        className="mt-2
+                                        h-11
+                                        rounded-xl
+                                        border-blue-200
+                                        focus:ring-2
+                                        focus:ring-blue-500"
+                                        value={name}
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
+                                    />
 
-                    </Label>
+                                </div>
 
-                    <Input
-                        type="password"
-                        value={
-                            passwords.newPassword
-                        }
-                        onChange={(e)=>
+                                <Button
+                                    className="
+                                        bg-blue-600
+                                        hover:bg-blue-700
+                                        rounded-xl
+                                        shadow-lg
+                                    "
+                                >
+                                    Save Changes
+                                </Button>
 
-                            setPasswords({
+                            </form>
 
-                                ...passwords,
+                        </div>
 
-                                newPassword:
-                                    e.target.value,
+                        {/* Change Password */}
+                        <div className="rounded-3xl border-l-8 border-amber-500 bg-white shadow-xl p-6">
 
-                            })
+                            <h2 className="text-xl font-semibold mb-6">
+                                Change Password
+                            </h2>
 
-                        }
-                    />
+                            <form
+                                onSubmit={handleChangePassword}
+                                className="space-y-5"
+                            >
 
-                    <Label>
+                                <div>
 
-                        Confirm Password
+                                    <Label>
+                                        Current Password
+                                    </Label>
 
-                    </Label>
+                                    <Input
+                                        className="mt-2
+                                        h-11
+                                        rounded-xl
+                                        border-blue-200
+                                        focus:ring-2
+                                        focus:ring-blue-500"
+                                        type="password"
+                                        value={passwords.currentPassword}
+                                        onChange={(e) =>
+                                            setPasswords({
+                                                ...passwords,
+                                                currentPassword: e.target.value,
+                                            })
+                                        }
+                                    />
 
-                    <Input
-                        type="password"
-                        value={
-                            passwords.confirmPassword
-                        }
-                        onChange={(e)=>
+                                </div>
 
-                            setPasswords({
+                                <div>
 
-                                ...passwords,
+                                    <Label>
+                                        New Password
+                                    </Label>
 
-                                confirmPassword:
-                                    e.target.value,
+                                    <Input
+                                        className="mt-2
+                                        h-11
+                                        rounded-xl
+                                        border-blue-200
+                                        focus:ring-2
+                                        focus:ring-blue-500"
+                                        type="password"
+                                        value={passwords.newPassword}
+                                        onChange={(e) =>
+                                            setPasswords({
+                                                ...passwords,
+                                                newPassword: e.target.value,
+                                            })
+                                        }
+                                    />
 
-                            })
+                                </div>
 
-                        }
-                    />
+                                <div>
 
-                    <Button type="submit">
+                                    <Label>
+                                        Confirm Password
+                                    </Label>
 
-                        Change Password
+                                    <Input
+                                        className="mt-2
+                                        h-11
+                                        rounded-xl
+                                        border-blue-200
+                                        focus:ring-2
+                                        focus:ring-blue-500"
+                                        type="password"
+                                        value={passwords.confirmPassword}
+                                        onChange={(e) =>
+                                            setPasswords({
+                                                ...passwords,
+                                                confirmPassword: e.target.value,
+                                            })
+                                        }
+                                    />
 
-                    </Button>
+                                </div>
 
-                </form>
+                                <Button
+                                    className="
+                                        bg-amber-500
+                                        hover:bg-amber-600
+                                        rounded-xl
+                                        shadow-lg
+                                    "
+                                >
+                                    Update Password
+                                </Button>
 
-                <Button
-                    variant="destructive"
-                    onClick={handleLogout}
-                >
+                            </form>
 
-                    Logout
+                        </div>
 
-                </Button>
+                        {/* Logout */}
+                        <div className="rounded-3xl border-l-8 border-red-500 bg-white shadow-xl p-6">
 
-            </div>
+                            <h2 className="text-xl font-bold text-slate-800">
+                                Account
+                            </h2>
+
+                            <p className="text-gray-500 mb-6">
+                                Sign out from your account.
+                            </p>
+
+                            <Button
+                                className="
+                                    rounded-xl
+                                    bg-gradient-to-r
+                                    from-red-500
+                                    to-rose-600
+                                    hover:from-red-600
+                                    hover:to-rose-700
+                                    text-white
+                                    shadow-lg
+                                "
+                            >
+                                Logout
+                            </Button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
 
         </>
-
     );
 
 }

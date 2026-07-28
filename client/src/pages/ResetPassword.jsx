@@ -74,19 +74,35 @@ export default function ResetPassword() {
 
     return (
 
-        <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 flex items-center justify-center px-4">
 
-            <Card className="w-full max-w-md">
+            <Card className="w-full max-w-md rounded-3xl border-0 shadow-2xl">
 
-                <CardHeader>
+                <CardHeader className="space-y-4 text-center">
 
-                    <CardTitle>
-                        Reset Password
-                    </CardTitle>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg">
 
-                    <CardDescription>
-                        Enter OTP and your new password.
-                    </CardDescription>
+                        <span className="text-4xl">
+                            🔑
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <CardTitle className="text-3xl font-bold">
+
+                            Reset Password
+
+                        </CardTitle>
+
+                        <CardDescription className="mt-2 text-base">
+
+                            Enter the verification code sent to your email and choose a new password.
+
+                        </CardDescription>
+
+                    </div>
 
                 </CardHeader>
 
@@ -94,54 +110,113 @@ export default function ResetPassword() {
 
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="space-y-4"
+                        className="space-y-5"
                     >
+
+                        {/* Email */}
 
                         <div>
 
-                            <Label>Email</Label>
+                            <Label className="mb-2 block">
+                                Email Address
+                            </Label>
 
                             <Input
                                 value={email || ""}
                                 disabled
+                                className="h-12 rounded-xl bg-slate-100"
                             />
 
                         </div>
 
+                        {/* OTP */}
+
                         <div>
 
-                            <Label>OTP</Label>
+                            <Label className="mb-2 block">
+                                Verification Code
+                            </Label>
 
                             <Input
-                                {...register("otp")}
+                                placeholder="Enter 6-digit OTP"
                                 maxLength={6}
+                                className="h-12 rounded-xl tracking-[0.4em] text-center text-lg"
+                                {...register("otp")}
                             />
 
                         </div>
 
+                        {/* Password */}
+
                         <div>
 
-                            <Label>New Password</Label>
+                            <Label className="mb-2 block">
+                                New Password
+                            </Label>
 
                             <Input
                                 type="password"
+                                placeholder="Create a new password"
+                                className="h-12 rounded-xl"
                                 {...register("password")}
                             />
 
                         </div>
 
+                        {/* Button */}
+
                         <Button
-                            className="w-full"
-                            disabled={loading}
                             type="submit"
+                            disabled={loading}
+                            className="
+                                w-full
+                                h-12
+                                rounded-xl
+                                bg-gradient-to-r
+                                from-blue-600
+                                to-indigo-600
+                                hover:from-blue-700
+                                hover:to-indigo-700
+                                transition-all
+                                duration-300
+                                shadow-lg
+                                hover:shadow-xl
+                            "
                         >
 
-                            {loading
-                                ? <Loader2 className="animate-spin" />
-                                : "Reset Password"
-                            }
+                            {loading ? (
+
+                                <>
+
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+
+                                    Resetting...
+
+                                </>
+
+                            ) : (
+
+                                "Reset Password"
+
+                            )}
 
                         </Button>
+
+                        <p className="text-center text-sm text-gray-600">
+
+                            Remember your password?{" "}
+
+                            <button
+                                type="button"
+                                onClick={() => navigate("/login")}
+                                className="font-semibold text-blue-600 hover:underline"
+                            >
+
+                                Back to Login
+
+                            </button>
+
+                        </p>
 
                     </form>
 
