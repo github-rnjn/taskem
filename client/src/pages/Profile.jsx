@@ -168,7 +168,7 @@ export default function Profile() {
     if (loading) {
         return (
             <>
-                <Loader text="Loading dashboard..." />
+                <Loader text="Loading Profile..." />
             </>
         );
     }
